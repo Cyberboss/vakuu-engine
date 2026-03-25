@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-using SlayTheSpire.Goap.Statuses;
+using SlayTheSpire2.Goap.Statuses;
 
-namespace SlayTheSpire.Goap.Cards
+namespace SlayTheSpire2.Goap.Cards
 {
     public abstract class Defend<TDefend> : CardArchetype<TDefend>
         where TDefend : Defend<TDefend>, new()

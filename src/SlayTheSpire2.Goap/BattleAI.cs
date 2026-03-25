@@ -4,9 +4,9 @@ using System.Linq;
 
 using MountainGoap;
 
-using SlayTheSpire.Goap.Goals;
+using SlayTheSpire2.Goap.Goals;
 
-namespace SlayTheSpire.Goap
+namespace SlayTheSpire2.Goap
 {
     public sealed class BattleAI
     {

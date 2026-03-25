@@ -1,4 +1,4 @@
-﻿namespace SlayTheSpire.Goap.Cards.Ironclad
+﻿namespace SlayTheSpire2.Goap.Cards.Ironclad
 {
     public sealed class Defend : Defend<Defend>
     {

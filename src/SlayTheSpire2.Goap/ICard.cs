@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SlayTheSpire.Goap
+namespace SlayTheSpire2.Goap
 {
     public interface ICard
     {

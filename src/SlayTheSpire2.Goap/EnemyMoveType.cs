@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlayTheSpire.Goap
+namespace SlayTheSpire2.Goap
 {
     [Flags]
     public enum EnemyMoveType

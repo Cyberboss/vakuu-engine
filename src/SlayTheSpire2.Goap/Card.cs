@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SlayTheSpire.Goap
+namespace SlayTheSpire2.Goap
 {
     public sealed class Card : ICard
     {

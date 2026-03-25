@@ -1,4 +1,4 @@
-﻿namespace SlayTheSpire.Goap
+﻿namespace SlayTheSpire2.Goap
 {
     internal abstract class CountdownStatus<TImplementation> : Status<TImplementation>
         where TImplementation : IStatus

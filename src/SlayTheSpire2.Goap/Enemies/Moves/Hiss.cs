@@ -1,4 +1,4 @@
-﻿namespace SlayTheSpire.Goap.Enemies.Moves
+﻿namespace SlayTheSpire2.Goap.Enemies.Moves
 {
     internal sealed class Hiss : IEnemyMove
     {

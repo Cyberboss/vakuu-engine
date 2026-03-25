@@ -2,7 +2,7 @@
 
 using MountainGoap;
 
-namespace SlayTheSpire.Goap
+namespace SlayTheSpire2.Goap
 {
     internal sealed class MaximizeDosh : ExtremeGoal
     {

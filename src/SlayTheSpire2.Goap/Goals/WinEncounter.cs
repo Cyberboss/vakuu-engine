@@ -2,7 +2,7 @@
 
 using MountainGoap;
 
-namespace SlayTheSpire.Goap.Goals
+namespace SlayTheSpire2.Goap.Goals
 {
     internal sealed class WinEncounter : Goal
     {

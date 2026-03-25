@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SlayTheSpire.Goap
+namespace SlayTheSpire2.Goap
 {
     public abstract class Combatant
     {

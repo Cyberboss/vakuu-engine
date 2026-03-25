@@ -1,4 +1,4 @@
-﻿namespace SlayTheSpire.Goap
+﻿namespace SlayTheSpire2.Goap
 {
     public interface IEnemyMove
     {

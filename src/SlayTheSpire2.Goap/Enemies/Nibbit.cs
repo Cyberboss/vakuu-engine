@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using SlayTheSpire.Goap.Enemies.Moves;
+using SlayTheSpire2.Goap.Enemies.Moves;
 
-namespace SlayTheSpire.Goap.Enemies
+namespace SlayTheSpire2.Goap.Enemies
 {
     internal sealed class Nibbit : IEnemyArchetype
     {

@@ -1,13 +1,8 @@
-﻿using System;
-
-namespace SlayTheSpire.Goap
+﻿namespace SlayTheSpire2.Goap
 {
-    public abstract class CardArchetype<TCard> : ICardArchetype
+    public abstract class CardArchetype<TCard> : Singleton<TCard>, ICardArchetype
         where TCard : CardArchetype<TCard>, new()
     {
-        static readonly Lazy<TCard> Singleton = new Lazy<TCard>(() => new TCard());
-
-        public static TCard Instance => Singleton.Value;
         public abstract string Name { get; }
 
         public abstract CardType Type { get; }

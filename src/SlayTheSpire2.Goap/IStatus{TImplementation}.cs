@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlayTheSpire.Goap
+namespace SlayTheSpire2.Goap
 {
     internal abstract class Status<TImplementation> : IStatus
         where TImplementation : IStatus

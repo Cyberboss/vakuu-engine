@@ -1,4 +1,4 @@
-﻿namespace SlayTheSpire.Goap.Cards.Ironclad
+﻿namespace SlayTheSpire2.Goap.Cards.Ironclad
 {
     public abstract class IroncladCard<TCard> : CardArchetype<TCard>
         where TCard : IroncladCard<TCard>, new()

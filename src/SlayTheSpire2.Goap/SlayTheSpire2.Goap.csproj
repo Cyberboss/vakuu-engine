@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <Folder Include="Cards\Colorless\" />
-    <Folder Include="Enemies\Encounters\" />
   </ItemGroup>
 
 </Project>

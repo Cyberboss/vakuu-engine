@@ -1,4 +1,4 @@
-﻿namespace SlayTheSpire.Goap.Cards
+﻿namespace SlayTheSpire2.Goap.Cards
 {
     public abstract class Strike<TStrike> : CardArchetype<TStrike>
         where TStrike : Strike<TStrike>, new()

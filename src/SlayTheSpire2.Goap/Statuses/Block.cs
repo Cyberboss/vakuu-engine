@@ -1,4 +1,4 @@
-﻿namespace SlayTheSpire.Goap.Statuses
+﻿namespace SlayTheSpire2.Goap.Statuses
 {
     internal sealed class Block : Status<Block>
     {

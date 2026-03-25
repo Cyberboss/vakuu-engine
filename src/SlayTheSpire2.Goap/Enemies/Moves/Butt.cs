@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlayTheSpire.Goap.Enemies.Moves
+namespace SlayTheSpire2.Goap.Enemies.Moves
 {
     internal sealed class Butt : IEnemyMove
     {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using SlayTheSpire.Goap.Cards.Ironclad;
+using SlayTheSpire2.Goap.Cards.Ironclad;
 
-namespace SlayTheSpire.Goap
+namespace SlayTheSpire2.Goap
 {
     public sealed class PlayerCharacter : Combatant
     {
