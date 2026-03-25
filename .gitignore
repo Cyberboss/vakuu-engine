@@ -1,0 +1,12 @@
+# Ignore everything
+*
+# But re-include the .gitignore file itself
+!.gitignore
+# Re-include all directories so Git can look inside them for re-included files
+!*/
+
+!src/**/*.cs
+!src/**/*.csproj
+
+[Oo]bj/
+[Bb]in/
