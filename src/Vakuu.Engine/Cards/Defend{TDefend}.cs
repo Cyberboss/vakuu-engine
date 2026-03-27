@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace Vakuu.Engine.Cards
+{
+    public abstract class Defend<TDefend> : CardArchetype<TDefend>
+        where TDefend : Defend<TDefend>, new()
+    {
+        public override string Name => "Defend";
+
+        public override CardType Type => CardType.Attack;
+
+        public override IEnumerable<IReadOnlyCollection<IReadOnlyCollection<Enemy>>> SelectTargetPermutations(IEnumerable<Enemy> potentialTargets, bool upgraded)
+            => SelfTargeted();
+
+        public override void BuildAction(
+            IReadOnlyCollection<Enemy> targets,
+            ActionBuilder builder,
+            bool upgraded)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
