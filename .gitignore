@@ -5,6 +5,7 @@
 # Re-include all directories so Git can look inside them for re-included files
 !*/
 
+!*.slnx
 !src/**/*.cs
 !src/**/*.csproj
 !tests/**/*.cs

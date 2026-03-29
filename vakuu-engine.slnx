@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/Vakuu.Engine/Vakuu.Engine.csproj" />
+  <Project Path="tests/Vakuu.Engine.Tests/Vakuu.Engine.Tests.csproj" Id="21ae1685-8044-4a58-b43d-715f5b37eab0" />
+</Solution>
