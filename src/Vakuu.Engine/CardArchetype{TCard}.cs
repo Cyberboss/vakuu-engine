@@ -19,6 +19,8 @@ namespace Vakuu.Engine
         public abstract CardType Type { get; }
         public abstract CardPool Pool { get; }
 
+        public abstract byte EnergyCost { get; }
+
         public void BuildAction(IReadOnlyCollection<Enemy> targets, IActionBuilder builder, PlayerCharacter character, bool upgraded)
         {
             FieldCard.FinalizePreviousCardAction(targets, builder, character);
@@ -28,10 +30,17 @@ namespace Vakuu.Engine
                     input => input + 1,
                     Variables.PlayerCardActionNumber));
 
+            builder.Reduce(
+                new Reducer(
+                    input => input - EnergyCost,
+                    State.Energy));
+
             BuildActionImpl(targets, builder, upgraded);
         }
 
         public abstract IEnumerable<IReadOnlyCollection<IReadOnlyCollection<Enemy>>> SelectTargetPermutations(IEnumerable<Enemy> potentialTargets, bool upgraded);
+        public bool EvaluatePreconditions(IReadOnlyDictionary<string, object?> state, bool upgraded)
+            => (byte)state[State.Energy]! >= EnergyCost;
 
         protected abstract void BuildActionImpl(IReadOnlyCollection<Enemy> targets, IActionBuilder builder, bool upgraded);
 

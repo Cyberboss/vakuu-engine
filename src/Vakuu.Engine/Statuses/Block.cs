@@ -6,6 +6,12 @@ namespace Vakuu.Engine.Statuses
     {
         public string Name => "Block";
 
+        public void OnTurnStart(IActionBuilder actionBuilder, Combatant combatant)
+            => actionBuilder.Reduce(
+                new Reducer(
+                    (variables, input) => 0,
+                    combatant.IncomingDamageVariable));
+
         public void OnActionTaken(IActionBuilder actionBuilder, Combatant source, Combatant? target)
         {
             if (target == null)

@@ -30,7 +30,8 @@ namespace Vakuu.Engine.Tests.Battle
                 new Config(),
                 character,
                 health,
-                ascension);
+                ascension,
+                Constants.DefaultEnergy);
         }
 
         protected void DrawRun(Action<IDrawHelper> run)
@@ -44,12 +45,12 @@ namespace Vakuu.Engine.Tests.Battle
         {
             Assert.IsNotNull(AI);
             var startCount = draw.Count;
-            foreach (var card in AI.DeckCards)
+            foreach (var card in AI.DeckCards.OrderBy(x => x.ToString()))
             {
                 if (card.Archetype.GetType() == typeof(TCard))
                 {
                     draw.Add(card.ID);
-                    if (draw.Count > startCount + amount)
+                    if (draw.Count >= startCount + amount)
                         break;
                 }
             }

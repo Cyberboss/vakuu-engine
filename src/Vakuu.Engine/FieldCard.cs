@@ -151,6 +151,7 @@ namespace Vakuu.Engine
                         cost);
 
                     builder.AddStaticPrecondition(InHandState, true);
+                    builder.AddDynamicPrecondition(state => Archetype.EvaluatePreconditions(state, Upgraded));
 
                     if (Modifiers.Contains(CardModifier.Exhaust))
                     {
@@ -185,6 +186,8 @@ namespace Vakuu.Engine
                     Archetype.BuildAction(targetList, builder, character, Upgraded);
 
                     FinalizePreviousCardAction(targetList, builder, character);
+
+                    builder.ApplyCombatBuffers();
 
                     if (targetList.Count > 0)
                         foreach (var target in targetList)

@@ -5,11 +5,16 @@ using System.Linq;
 
 using MountainGoap;
 
+using Vakuu.Engine.Statuses;
+
 namespace Vakuu.Engine
 {
     sealed class ActionBuilder : IActionBuilder
     {
         readonly System.Action executor;
+
+        readonly List<Enemy> enemies;
+        readonly PlayerCharacter character;
 
         readonly Dictionary<string, object?> preconditions;
         readonly Dictionary<string, ComparisonValuePair> arithmeticPreconditions;
@@ -20,6 +25,8 @@ namespace Vakuu.Engine
         readonly List<string>[] taggedVariables;
 
         float? cost;
+
+        bool built;
 
         public ActionBuilder(IEnumerable<Enemy> enemies, PlayerCharacter character, System.Action executor, string name, float? cost)
         {
@@ -38,7 +45,10 @@ namespace Vakuu.Engine
             for (var i = 0; i < totalTags; ++i)
                 taggedVariables[i] = new List<string>();
 
-            AddDefaultVariables(enemies, character);
+            this.enemies = enemies.ToList();
+            this.character = character;
+
+            AddDefaultVariables();
         }
 
         public string Name { get; }
@@ -69,10 +79,30 @@ namespace Vakuu.Engine
         public void Reduce(IReducer reducer)
             => reducers.Add(reducer);
 
+        public void ApplyCombatBuffers()
+        {
+            foreach (var combatant in Combatants())
+            {
+                Reduce(
+                    new Reducer(
+                        (variables, input) => input + variables[combatant.BlockGainVariable],
+                        combatant.StatusState<Block>()));
+                Reduce(
+                    new Reducer(
+                        (variables, input) => input - Math.Min(input, variables[combatant.IncomingDamageVariable]),
+                        combatant.HealthState));
+            }
+        }
+
         public MountainGoap.Action Build()
         {
+            if (built)
+                throw new InvalidOperationException("ActionBuilder already built!");
+
             if (!cost.HasValue)
                 throw new InvalidOperationException($"ActionBuilder \"{Name}\" does not have a cost set on Build!");
+
+            built = true;
 
             void Mutator(MountainGoap.Action _, ConcurrentDictionary<string, object?> currentState)
             {
@@ -160,19 +190,13 @@ namespace Vakuu.Engine
         IReadOnlyList<string> GetVariablesNameFromActionTag(ActionVariableTag tag)
             => taggedVariables[(int)tag];
 
-        void AddDefaultVariables(IEnumerable<Enemy> enemies, PlayerCharacter character)
+        void AddDefaultVariables()
         {
-            IEnumerable<Combatant> Combatants()
-            {
-                yield return character;
-                foreach (var enemy in enemies)
-                    yield return enemy;
-            }
-
             foreach (var combatant in Combatants())
             {
                 AddVariableFromState(combatant.HealthState, result => (ushort)result);
                 AddVariableFromState(combatant.MaxHealthState, result => (ushort)result);
+                AddVariable<ushort>(combatant.IncomingDamageVariable, 0.0f, null);
                 AddVariable<ushort>(combatant.BlockGainVariable, 0.0f, null);
             }
 
@@ -191,5 +215,12 @@ namespace Vakuu.Engine
         }
 
         public void RepeatTaggedReducers(ActionVariableTag actionVariableTag, float multiplier) => throw new NotImplementedException();
+
+        IEnumerable<Combatant> Combatants()
+        {
+            yield return character;
+            foreach (var enemy in enemies)
+                yield return enemy;
+        }
     }
 }

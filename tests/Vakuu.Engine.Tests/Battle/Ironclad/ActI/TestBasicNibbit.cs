@@ -19,7 +19,7 @@ namespace Vakuu.Engine.Tests.Battle.Ironclad.ActI
             DrawRun(helper =>
             {
                 helper.Draw<Strike>(3);
-                helper.Draw<Defend>(amount: 2);
+                helper.Draw<Defend>(2);
             });
 
             while (true)

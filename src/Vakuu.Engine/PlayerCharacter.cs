@@ -33,7 +33,7 @@ namespace Vakuu.Engine
             switch (character)
             {
                 case Character.Ironclad:
-                    Deck.AddRange(Enumerable.Repeat<object?>(null, 6).Select(_ => new DeckCard(Cards.Ironclad.Strike.Instance)));
+                    Deck.AddRange(Enumerable.Repeat<object?>(null, 5).Select(_ => new DeckCard(Cards.Ironclad.Strike.Instance)));
                     Deck.AddRange(Enumerable.Repeat<object?>(null, 4).Select(_ => new DeckCard(Cards.Ironclad.Defend.Instance)));
                     Deck.Add(new DeckCard(Bash.Instance));
                     break;
@@ -41,5 +41,7 @@ namespace Vakuu.Engine
                     throw new NotImplementedException($"No initial deck for {character}!");
             }
         }
+
+        public override string ToString() => Character.ToString();
     }
 }

@@ -11,6 +11,8 @@ namespace Vakuu.Engine.Cards.Ironclad
 
         public override CardType Type => CardType.Attack;
 
+        public override byte EnergyCost => 1;
+
         public override IEnumerable<IReadOnlyCollection<IReadOnlyCollection<Enemy>>> SelectTargetPermutations(IEnumerable<Enemy> potentialTargets, bool upgraded)
             => SingleTargeted(potentialTargets);
 

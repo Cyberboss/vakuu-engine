@@ -22,6 +22,8 @@ namespace Vakuu.Engine
 
         void BuildAction(IReadOnlyCollection<Enemy> targets, IActionBuilder builder, PlayerCharacter character, bool upgraded);
 
+        bool EvaluatePreconditions(IReadOnlyDictionary<string, object?> state, bool upgraded);
+
         string ToString(bool upgraded)
             => upgraded
                 ? $"{Name}+"

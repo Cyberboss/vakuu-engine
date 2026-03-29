@@ -29,7 +29,8 @@ namespace Vakuu.Engine
             Config config,
             PlayerCharacter character,
             Health playerHealth,
-            Ascension ascension)
+            Ascension ascension,
+            byte startingEnergy)
         {
             ArgumentNullException.ThrowIfNull(encounter);
             ArgumentNullException.ThrowIfNull(config);
@@ -42,6 +43,7 @@ namespace Vakuu.Engine
                 { State.TurnNumber, 1 },
                 { State.DeckSize, character.Deck.Count },
                 { State.DiscardSize, 0 },
+                { State.Energy, startingEnergy },
             };
 
             StatusRepository.Apply(status => state.Add(character.StatusState(status), 0));
@@ -188,17 +190,31 @@ namespace Vakuu.Engine
                         card.InDeckState));
             }
 
-            Dictionary<ulong, Func<IReadOnlyDictionary<string, object?>, bool>> cardCanBeDrawnPreconditions = cards
+            Dictionary<ulong, Func<IReadOnlyDictionary<string, object?>, bool>> cardCanBeInHandPreconditions = cards
                 .ToDictionary(
                     kvp => kvp.Key,
                     kvp =>
                     {
                         var card = kvp.Value;
                         return (Func<IReadOnlyDictionary<string, object?>, bool>)(
-                            state => (int)state[card.InDeckState]! > 0
-                                || ((!card.Modifiers.Contains(CardModifier.Retain) && (int)state[card.InHandState]! > 0
-                                || (int)state[card.InDiscardState]! > 0)
-                                && (int)state[State.CardDraw]! >= (int)state[State.DeckSize]!));
+                            state =>
+                            {
+                                if ((bool)state[card.InDeckState]!)
+                                    return true;
+
+                                if ((bool)state[card.InHandState]! && card.Modifiers.Contains(CardModifier.Retain))
+                                    return true;
+
+                                var retainInHand = !card.Modifiers.Contains(CardModifier.Retain) && (bool)state[card.InHandState]!;
+                                if (retainInHand || (bool)state[card.InDiscardState]!)
+                                {
+                                    var potentialToDraw = (byte)state[State.CardDraw]! > (int)state[State.DeckSize]!;
+                                    if (potentialToDraw)
+                                        return true;
+                                }
+
+                                return false;
+                            });
                     });
 
             var drawnNCardsReducers = new Reducer[Constants.MaxHandSize];
@@ -223,18 +239,23 @@ namespace Vakuu.Engine
                     nameBuilder.Append(": ");
 
                     var first = true;
-                    foreach (var card in drawnCards)
+                    foreach (var cardID in drawnCards)
                     {
                         if (first)
                             first = false;
                         else
                             nameBuilder.Append(", ");
 
-                        nameBuilder.Append(card.ToString());
+                        nameBuilder.Append(cards[cardID].ToString());
                     }
                 }
 
                 var name = nameBuilder.ToString();
+
+                /*
+                if (drawnCards.Count == 5 && !name.Contains("Strike (#1)") && !name.Contains("Strike (#2)") && !name.Contains("Strike (#3)") && !name.Contains("Defend (#5)") && !name.Contains("Defend (#6)"))
+                    name += " WINNABLE";
+                */
 
                 var endTurnActionBuilder = new ActionBuilder(
                     enemies,
@@ -250,10 +271,12 @@ namespace Vakuu.Engine
 
                 endTurnActionBuilder.AddStaticPrecondition(
                     State.CardDraw,
-                    drawnCards.Count);
+                    (byte)drawnCards.Count);
 
                 foreach (var cardID in drawnCards)
-                    endTurnActionBuilder.AddDynamicPrecondition(cardCanBeDrawnPreconditions[cardID]);
+                    endTurnActionBuilder.AddDynamicPrecondition(cardCanBeInHandPreconditions[cardID]);
+
+                endTurnActionBuilder.AddVariable(State.Energy, Constants.DefaultEnergy, result => (byte)Math.Floor(result));
 
                 foreach (var reducer in basicCardMoveReducers.Concat(resetEnemyStateVariablesReducers))
                     endTurnActionBuilder.Reduce(reducer);
@@ -268,6 +291,8 @@ namespace Vakuu.Engine
 
                 foreach (var enemy in aliveEnemies)
                     enemy.ApplyMoves(endTurnActionBuilder, character, ascension, movesetIndex);
+
+                endTurnActionBuilder.ApplyCombatBuffers();
 
                 foreach (var enemy in aliveEnemies)
                     StatusRepository.Apply(status => status.OnTurnEnd(endTurnActionBuilder, enemy));
@@ -309,13 +334,14 @@ namespace Vakuu.Engine
                 new List<BaseGoal>
                 {
                     new WinAndSurvive(config.WinAndSurvive),
-                    new DontOverheal(config.DontOverheal, playerHealth.Max),
-                    new MaximizeHP(config.MaximizeHP),
-                    new DontLoseMaxHP(config.PreserveMaxHP),
-                    new MaximizeDosh(config.MaximizeDosh),
-                    new MaintainPotions(config.MaintainPotions),
+                    //new DontOverheal(config.DontOverheal, playerHealth.Max),
+                    //new MaximizeHP(config.MaximizeHP),
+                    //new DontLoseMaxHP(config.PreserveMaxHP),
+                    //new MaximizeDosh(config.MaximizeDosh),
+                    //new MaintainPotions(config.MaintainPotions),
                 },
-                actions);
+                actions,
+                stepMaximum: 100);
         }
 
         public IReadOnlyDictionary<ulong, FieldCard> Cards => cards;

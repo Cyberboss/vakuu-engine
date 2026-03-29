@@ -9,6 +9,8 @@ namespace Vakuu.Engine.Cards
 
         public override CardType Type => CardType.Attack;
 
+        public override byte EnergyCost => 1;
+
         public override IEnumerable<IReadOnlyCollection<IReadOnlyCollection<Enemy>>> SelectTargetPermutations(IEnumerable<Enemy> potentialTargets, bool upgraded)
             => SelfTargeted;
 

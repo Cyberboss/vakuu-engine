@@ -1,6 +1,4 @@
-﻿using Vakuu.Engine.Statuses;
-
-namespace Vakuu.Engine.Enemies.Moves
+﻿namespace Vakuu.Engine.Enemies.Moves
 {
     internal sealed class HesitantSlice : IEnemyMove
     {
@@ -13,7 +11,7 @@ namespace Vakuu.Engine.Enemies.Moves
             actionBuilder.Reduce(
                 new Reducer(
                     input => input + 5,
-                    enemy.StatusState<Block>()));
+                    enemy.BlockGainVariable));
             actionBuilder.Reduce(
                 new Reducer(
                     _ => 6,
